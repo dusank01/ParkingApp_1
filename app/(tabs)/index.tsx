@@ -1,41 +1,8 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 //npm install @react-native-async-storage/async-storage
-import { useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 export default function HomeScreen() {
-  const [plates, setPlates] = useState<string | null>(null);
-
-  useFocusEffect(
-    useCallback(() => {
-      const loadPlates = async () => {
-        try {
-          const savedPlates = await AsyncStorage.getItem("user_plates");
-          setPlates(savedPlates);
-        } catch (e) {
-          console.error("Greška pri učitavanju tablica:", e);
-        }
-      };
-      loadPlates();
-    }, []),
-  );
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Dobrodošli u Parking App!</Text>
-      <View style={styles.card}>
-        <Text style={styles.label}>Vaše tablice:</Text>
-        <Text style={styles.plateDisplay}>
-          {plates ? plates : "Nema tablica"}
-        </Text>
-      </View>
-      <Text style={styles.instructions}>
-        Tablice možete promeniti klikom na dugme u gornjem desnom uglu
-        navigacije.
-      </Text>
-    </View>
-  );
+  return <View></View>;
 }
 
 const styles = StyleSheet.create({
