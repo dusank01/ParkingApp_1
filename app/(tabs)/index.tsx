@@ -1,8 +1,41 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 //npm install @react-native-async-storage/async-storage
-import { StyleSheet, View } from "react-native";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
-  return <View></View>;
+  const [plates, setPlates] = useState<string | null>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      const loadPlates = async () => {
+        try {
+          const savedPlates = await AsyncStorage.getItem("user_plates");
+          setPlates(savedPlates);
+        } catch (e) {
+          console.error("Greška pri učitavanju tablica:", e);
+        }
+      };
+      loadPlates();
+    }, []),
+  );
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Dobrodošli u Parking App!</Text>
+      <View style={styles.card}>
+        <Text style={styles.label}>Vaše tablice:</Text>
+        <Text style={styles.plateDisplay}>
+          {plates ? plates : "Nema tablica"}
+        </Text>
+      </View>
+      <Text style={styles.instructions}>
+        Tablice možete promeniti klikom na dugme u gornjem desnom uglu
+        navigacije.
+      </Text>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -10,14 +43,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#0A0E21",
     padding: 20,
   },
   title: {
     fontSize: 22,
     fontWeight: "bold",
     marginBottom: 30,
-    color: "#333",
+    color: "#d6d6d6",
   },
   card: {
     width: "100%",
