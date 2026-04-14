@@ -1,6 +1,7 @@
 // app/(tabs)/index.tsx
 import React from "react";
 import { StyleSheet, View } from "react-native";
+//npx expo install react-native-maps expo-location
 //import * as Location from "expo-location";
 //import { useRouter } from "expo-router";
 //import React, { useEffect, useState } from "react";

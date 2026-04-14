@@ -13,6 +13,31 @@ import { StyleSheet, View } from "react-native";
 //import { supabase } from "../../lib/supabase";
 
 export default function ReservationsScreen() {
+  // const [myRes, setMyRes] = useState<any[]>([]);
+
+  // Osvežava listu svaki put kada otvorimo ovaj tab
+
+  //
+
+  // Funkcija za produživanje za 1 sat
+  /*async function extendReservation(id: string, currentEndsAt: string) {
+    const newTime = new Date(
+      new Date(currentEndsAt).getTime() + 60 * 60 * 1000,
+    ).toISOString();
+
+    const { error } = await supabase
+      .from("reservations")
+      .update({ ends_at: newTime })
+      .eq("id", id);
+
+    if (!error) {
+      Alert.alert("Produženo", "Vaša rezervacija je produžena za 60 minuta.");
+      fetchUserReservations();
+    }
+  }*/
+
+  // Funkcija za otkazivanje rezervacije
+
   return <View></View>;
 }
 
