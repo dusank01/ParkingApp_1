@@ -43,14 +43,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#0A0E21",
     padding: 20,
   },
   title: {
     fontSize: 22,
     fontWeight: "bold",
     marginBottom: 30,
-    color: "#333",
+    color: "#d6d6d6",
   },
   card: {
     width: "100%",

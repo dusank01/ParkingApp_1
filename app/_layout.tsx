@@ -9,8 +9,8 @@ export default function RootLayout() {
         - Kada pritisnete "Back", gornji ekran se sklanja.
         - Idealno za: Detalje proizvoda, Login forme, Podešavanja.
       */}
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> //
-      Uključuje sve ekrane unutar (tabs) foldera, glavna navigacija aplikacije
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      {/* Uključuje sve ekrane unutar (tabs) foldera, glavna navigacija aplikacije */}
       <Stack.Screen
         name="modal"
         options={{ presentation: "modal", headerTitle: "Unos tablica" }}
