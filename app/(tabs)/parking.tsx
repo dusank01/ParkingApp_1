@@ -1,14 +1,22 @@
+import { authUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
-import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function ParkingGrid() {
   const [spots, setSpots] = useState<any[]>([]);
 
   useFocusEffect(
     useCallback(() => {
-        fetchSpots();
+      fetchSpots();
     }, []),
   );
 
@@ -21,6 +29,14 @@ export default function ParkingGrid() {
   }
 
   async function reserveSpot(spot: any) {
+    const isAuthenticated = await authUser();
+    if (!isAuthenticated) {
+      Alert.alert(
+        "Neuspešna autentifikacija",
+        "Niste uspeli da se autentifikujete.",
+      );
+      return;
+    }
     const expiryTime = new Date(Date.now() + 60 * 60 * 1000).toISOString();
 
     const { error: resError } = await supabase
@@ -32,18 +48,18 @@ export default function ParkingGrid() {
       .update({ is_occupied: true })
       .eq("id", spot.id);
 
-    if(!resError) {
-        Alert.alert("Uspeh", `Mesto ${spot.name} je rezervisano!`);
-        fetchSpots();
+    if (!resError) {
+      Alert.alert("Uspeh", `Mesto ${spot.name} je rezervisano!`);
+      fetchSpots();
     }
   }
 
   return (
-    <View style = {styles.container}>
-      <Text style = {styles.headerTitle}>Garaža Obilićev Venac</Text>
+    <View style={styles.container}>
+      <Text style={styles.headerTitle}>Garaža Obilićev Venac</Text>
 
-      <View style = {styles.parkingArea}>
-        <View style = {styles.middleLine} />
+      <View style={styles.parkingArea}>
+        <View style={styles.middleLine} />
 
         <FlatList
           data={spots}
@@ -68,7 +84,7 @@ export default function ParkingGrid() {
         />
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({

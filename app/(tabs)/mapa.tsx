@@ -1,23 +1,29 @@
+import { verifyBluetoothPresence } from "@/lib/auth";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 export default function MapScreen() {
-  const [location, setLocation] = useState<Location.LocationObjectCoords | null>(null);
+  const [location, setLocation] =
+    useState<Location.LocationObjectCoords | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const router = useRouter();
 
   // Custom pop-up
   const [selectedMarker, setSelectedMarker] = useState(false);
 
-  
-
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if(status !== "granted") {
+      if (status !== "granted") {
         setErrorMsg("Dozvola za lokaciju je odbijena!");
         return;
       }
@@ -27,7 +33,7 @@ export default function MapScreen() {
     })();
   }, []);
 
-  if(!location && !errorMsg) {
+  if (!location && !errorMsg) {
     return (
       <View style={styles.center}>
         <ActivityIndicator size="large" color="#27AE60" />
@@ -35,10 +41,21 @@ export default function MapScreen() {
     );
   }
 
+  const handleReservation = async () => {
+    const isNearby = await verifyBluetoothPresence();
+    if (isNearby) {
+      router.push("/parking");
+    } else {
+      alert(
+        "Niste u blizini parkinga! Uključite Bluetooth i pokušajte ponovo.",
+      );
+    }
+  };
+
   return (
-    <View style = {styles.container}>
+    <View style={styles.container}>
       <MapView
-        style = {styles.map}
+        style={styles.map}
         initialRegion={{
           latitude: 44.8162,
           longitude: 20.4572,
@@ -47,28 +64,36 @@ export default function MapScreen() {
         }}
         showsUserLocation
       >
-        <Marker 
+        <Marker
           coordinate={{ latitude: 44.8162, longitude: 20.4572 }}
           onPress={() => setSelectedMarker(true)}
         />
       </MapView>
       {selectedMarker && (
-        <View style = {styles.popup}>
-          <Text style = {{ fontWeight: "bold" }}>Garaža Obilićev Venac</Text>
+        <View style={styles.popup}>
+          <Text style={{ fontWeight: "bold" }}>Garaža Obilićev Venac</Text>
           <Text>Klikni za rezervaciju</Text>
 
-          <View style = {{ flexDirection: "row", marginTop: 12, gap: 8 }}>
-            <TouchableOpacity onPress={()=>router.push("/parking")} style = {styles.popupBtn}>
-              <Text style = {{color: "white", fontWeight:"bold"}}>Rezerviši</Text>
+          <View style={{ flexDirection: "row", marginTop: 12, gap: 8 }}>
+            <TouchableOpacity
+              onPress={handleReservation}
+              style={styles.popupBtn}
+            >
+              <Text style={{ color: "white", fontWeight: "bold" }}>
+                Rezerviši
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>setSelectedMarker(false)} style = {styles.popupBtn}>
-              <Text style = {{color: "white"}}>Zatvori</Text>
+            <TouchableOpacity
+              onPress={() => setSelectedMarker(false)}
+              style={styles.popupBtn}
+            >
+              <Text style={{ color: "white" }}>Zatvori</Text>
             </TouchableOpacity>
           </View>
         </View>
       )}
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -85,7 +110,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#0A0E21"
+    backgroundColor: "#0A0E21",
   },
   popup: {
     position: "absolute",
@@ -98,7 +123,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     shadowColor: "#000",
     shadowOpacity: 0.2,
-    shadowOffset: {width:0, height:2},
+    shadowOffset: { width: 0, height: 2 },
   },
   popupBtn: {
     flex: 1,
@@ -107,4 +132,4 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
   },
-})
+});
